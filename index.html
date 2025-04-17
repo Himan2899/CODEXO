@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TruthGuard - Fake News Detector</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <div class="logo-icon"><i class="fas fa-shield-halved"></i></div>
+                <h1>TruthGuard</h1>
+            </div>
+            <p class="tagline">Clear answers to combat misinformation</p>
+        </header>
+
+        <main>
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="text">Text</button>
+                <button class="tab-btn" data-tab="url">URL</button>
+                <button class="tab-btn" data-tab="file">File</button>
+                <button class="tab-btn" data-tab="crawler">Web Crawler</button>
+            </div>
+
+            <div class="tab-content">
+                <div class="tab-pane active" id="text-pane">
+                    <textarea id="news-text" placeholder="Paste the news article or content here..."></textarea>
+                </div>
+
+                <div class="tab-pane" id="url-pane">
+                    <input type="url" id="news-url" placeholder="Enter the URL of the news article">
+                </div>
+
+                <div class="tab-pane" id="file-pane">
+                    <div class="file-upload">
+                        <label for="news-file"><i class="fas fa-upload"></i> Choose File</label>
+                        <input type="file" id="news-file" accept=".txt,.pdf,.docx">
+                        <span id="file-name">No file chosen</span>
+                    </div>
+                </div>
+
+                <div class="tab-pane" id="crawler-pane">
+                    <input type="url" id="crawler-url" placeholder="Enter the website URL to crawl">
+                    <div class="crawler-options">
+                        <label>
+                            <input type="number" id="crawler-depth" min="1" max="3" value="1">
+                            <span>Crawl Depth</span>
+                        </label>
+                        <label>
+                            <input type="number" id="crawler-pages" min="1" max="10" value="5">
+                            <span>Max Pages</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <button id="analyze-btn" class="analyze-btn">Analyze</button>
+
+            <div class="results" id="results">
+                <h2>Analysis Results</h2>
+                <div class="result-content" id="result-content">
+                    <!-- Results will be displayed here -->
+                </div>
+                <div class="details" id="details">
+                    <!-- Detailed analysis will be displayed here -->
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; 2023 TruthGuard - Fake News Detection Tool</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 

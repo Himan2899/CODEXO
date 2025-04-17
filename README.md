@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # TruthGuard - Fake News Detector
 
 TruthGuard is a web-based tool designed to help users detect potential fake news and misinformation. Using a combination of natural language processing techniques and pattern recognition, it analyzes text content and provides an assessment of its credibility.
@@ -89,3 +90,7 @@ This demo version uses a simplified algorithm based on keyword matching and basi
 ## License
 
 MIT License - Feel free to use and modify for your own projects. 
+=======
+# TruthGuard
+# TruthGuard - Fake News Detector  TruthGuard is a web-based tool designed to help users detect potential fake news and misinformation. Using a combination of natural language processing techniques and pattern recognition, it analyzes text content and provides an assessment of its credibility.
+>>>>>>> 98015d33fe0ce2690f2c8bed1ea9e898563c2d79
