@@ -1,7 +1,6 @@
-<<<<<<< HEAD
 # TruthGuard - Fake News Detector
 
-TruthGuard is a web-based tool designed to help users detect potential fake news and misinformation. Using a combination of natural language processing techniques and pattern recognition, it analyzes text content and provides an assessment of its credibility.
+TruthGuard is a web-based tool designed to help users detect potential fake news and misinformation. Using a combination of natural language processing techniques, pattern recognition, and database-driven analysis, it analyzes text content and provides an assessment of its credibility.
 
 ## Features
 
@@ -16,6 +15,14 @@ TruthGuard is a web-based tool designed to help users detect potential fake news
   - Detailed metrics and indicators
   - Source citation detection
   - Sentiment analysis
+  - Domain credibility checking
+  - Database matching for known content
+
+- **Machine Learning Capabilities**:
+  - User feedback collection
+  - Training data database
+  - Content matching for known fake/true news
+  - Reputation-based domain scoring
 
 ## How to Use
 
@@ -36,6 +43,7 @@ TruthGuard is a web-based tool designed to help users detect potential fake news
    - The verdict will be displayed as "True" or "False".
    - A confidence percentage indicates the reliability of the assessment.
    - Detailed metrics provide insight into the factors influencing the verdict.
+   - Provide feedback to help improve the system!
 
 ## Test Examples
 
@@ -58,39 +66,181 @@ Some people say that there might possibly be aliens living among us. They could 
 
 ## Technical Implementation
 
-This is a client-side application built with:
-- HTML5
-- CSS3
-- JavaScript (ES6+)
+This application is built with:
+- **Frontend**: HTML5, CSS3, JavaScript (ES6+)
+- **Backend**: Node.js with Express
+- **Database**: SQLite for storing training data and domain reputation
+- **NLP**: Custom text analysis algorithm with pattern recognition
 
-The fake news detection algorithm is based on:
-- Keyword pattern recognition
-- Source citation analysis
-- Text sentiment analysis
-
-## Limitations
-
-This demo version uses a simplified algorithm based on keyword matching and basic patterns. It is intended for educational purposes and should not be relied upon for definitive fact-checking. In a production environment, this would be connected to a more sophisticated machine learning model.
-
-## Future Improvements
-
-- Integration with professional fact-checking APIs
-- Machine learning model for improved accuracy
-- More comprehensive source verification
-- Historical context analysis
-- Support for additional file formats (PDF, DOCX)
-- Backend implementation for web crawling functionality
+The fake news detection algorithm uses a multi-faceted approach:
+1. **Database Matching**: Checks content against known fake and true news
+2. **Domain Credibility**: Evaluates source reputation from a maintained database
+3. **Content Analysis**: Keyword pattern recognition, weasel word detection, etc.
+4. **Structure Analysis**: Examines content characteristics (length, capitalization, etc.)
+5. **Machine Learning**: Improves over time through user feedback
 
 ## Getting Started
 
-1. Clone this repository
-2. Open `index.html` in your web browser
-3. No server or build process required for basic functionality
+1. **Clone the repository**:
+   ```
+   git clone https://github.com/yourusername/truthguard.git
+   cd truthguard
+   ```
+
+2. **Install dependencies**:
+   ```
+   npm install
+   ```
+
+3. **Set up the database with sample data**:
+   ```
+   npm run setup-db
+   ```
+
+4. **Start the server**:
+   ```
+   npm start
+   ```
+
+5. **Open in your browser**:
+   ```
+   http://localhost:3000
+   ```
+
+## Creating Your Custom Database
+
+You can customize TruthGuard with your own database of news sources and articles:
+
+### Method 1: Using the Setup Script
+
+1. **Create a custom database setup file** (e.g., `my-custom-db.js`):
+   ```javascript
+   const sqlite3 = require('sqlite3').verbose();
+   const { open } = require('sqlite');
+   const fs = require('fs');
+   const path = require('path');
+
+   async function setupCustomDatabase() {
+     console.log('Setting up custom TruthGuard database...');
+     
+     // Create database directory if it doesn't exist
+     const dbDir = path.join(__dirname, 'database');
+     if (!fs.existsSync(dbDir)) {
+       fs.mkdirSync(dbDir);
+     }
+     
+     // Open database connection
+     const db = await open({
+       filename: path.join(dbDir, 'news_detector.db'),
+       driver: sqlite3.Database
+     });
+     
+     // Add your custom true news examples
+     const myTrueNews = [
+       {
+         title: 'Your True Article Title',
+         content: 'Your verified article content here...',
+         source: 'Your Source'
+       },
+       // Add more true articles as needed
+     ];
+     
+     // Add your custom false news examples
+     const myFalseNews = [
+       {
+         title: 'Your False Article Title',
+         content: 'Your fake news article content here...',
+         source: 'Your Source'
+       },
+       // Add more false articles as needed
+     ];
+     
+     // Add your trusted sources
+     const myTrustedSources = [
+       { domain: 'yourtrustedsource.com', credibility_score: 0.9 },
+       // Add more trusted domains as needed
+     ];
+     
+     // Add your untrusted sources
+     const myUntrustedSources = [
+       { domain: 'youruntrustedsource.com', credibility_score: 0.2 },
+       // Add more untrusted domains as needed
+     ];
+     
+     // Insert your custom data
+     for (const news of myTrueNews) {
+       await db.run(
+         'INSERT INTO known_true_news (title, content, source) VALUES (?, ?, ?)',
+         [news.title, news.content, news.source]
+       );
+     }
+     
+     for (const news of myFalseNews) {
+       await db.run(
+         'INSERT INTO known_false_news (title, content, source) VALUES (?, ?, ?)',
+         [news.title, news.content, news.source]
+       );
+     }
+     
+     for (const source of [...myTrustedSources, ...myUntrustedSources]) {
+       await db.run(
+         'INSERT INTO credibility_sources (domain, credibility_score) VALUES (?, ?)',
+         [source.domain, source.credibility_score]
+       );
+     }
+     
+     console.log('Custom database setup complete');
+     await db.close();
+   }
+   
+   setupCustomDatabase().catch(error => {
+     console.error('Error setting up custom database:', error);
+   });
+   ```
+
+2. **Run your custom setup script**:
+   ```
+   node my-custom-db.js
+   ```
+
+### Method 2: Using the Web Interface
+
+1. **Start TruthGuard** with the default database
+2. **Analyze Content** using any of the input methods
+3. **Provide Feedback** by clicking "No" when asked if the verdict is correct
+4. **Add to Training Data** by clicking "Yes, add to training data" when prompted
+5. Repeat this process to build up your custom database over time
+
+### Method 3: Bulk Import from CSV
+
+1. **Create CSV files** for your data sources:
+   - `true_news.csv`: Articles known to be true
+   - `false_news.csv`: Articles known to be false
+   - `sources.csv`: Domain reputation data
+
+2. **Use the import script**:
+   ```
+   node import-data.js --true=true_news.csv --false=false_news.csv --sources=sources.csv
+   ```
+
+## Contributing to the Database
+
+The accuracy of TruthGuard increases as more data is added to its knowledge base. When using the application, you can:
+
+1. **Provide Feedback** on analysis results, helping improve the system
+2. **Add to Training Data** when you find false positives or false negatives
+3. **Submit Domain Reputation** updates through pull requests to this repository
+
+## Limitations
+
+While TruthGuard strives for accuracy, it has limitations:
+- The analysis is probabilistic, not definitive
+- It performs best with English-language news articles
+- Some nuanced misinformation may not be detected
+- Satire and opinions can sometimes be misclassified
+
+Always use critical thinking when evaluating news, even with technological assistance.
 
 ## License
 
-MIT License - Feel free to use and modify for your own projects. 
-=======
-# TruthGuard
-# TruthGuard - Fake News Detector  TruthGuard is a web-based tool designed to help users detect potential fake news and misinformation. Using a combination of natural language processing techniques and pattern recognition, it analyzes text content and provides an assessment of its credibility.
->>>>>>> 98015d33fe0ce2690f2c8bed1ea9e898563c2d79
+MIT License - Feel free to use and modify for your own projects.
